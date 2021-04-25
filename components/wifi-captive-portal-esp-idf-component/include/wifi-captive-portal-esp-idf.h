@@ -30,9 +30,9 @@ extern "C"
 {
 #endif
 
-void wifi_captive_portal_esp_idf_task(void *pvParameter);
+	void wifi_captive_portal_esp_idf_task(void *pvParameter);
 
-void wifi_captive_portal_esp_idf(void);
+	void wifi_captive_portal_esp_idf(void);
 
 #ifdef __cplusplus
 }

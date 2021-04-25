@@ -40,7 +40,7 @@ static struct wifi_captive_portal_esp_idf_wifi_task_action_t wifi_task_action;
 ESP_EVENT_DEFINE_BASE(WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT);
 
 #define WIFI_CONNECTED_BIT BIT0
-#define WIFI_FAIL_BIT      BIT1
+#define WIFI_FAIL_BIT BIT1
 
 static EventGroupHandle_t wifi_event_group;
 
@@ -82,7 +82,7 @@ static void wifi_captive_portal_esp_idf_wifi_ap_init(void)
 	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config_ap));
 
 	ESP_LOGI(wifi_captive_portal_esp_idf_wifi_tag, "starting WiFi access point: SSID: %s password:%s channel: %d",
-		CONFIG_EXAMPLE_WIFI_AP_SSID, CONFIG_EXAMPLE_WIFI_AP_PASSWORD, CONFIG_EXAMPLE_WIFI_AP_CHANNEL);
+					 CONFIG_EXAMPLE_WIFI_AP_SSID, CONFIG_EXAMPLE_WIFI_AP_PASSWORD, CONFIG_EXAMPLE_WIFI_AP_CHANNEL);
 
 	/** Wifi captive portal DNS init. */
 	wifi_captive_portal_esp_idf_dns_init();
@@ -107,14 +107,14 @@ static void wifi_captive_portal_esp_idf_wifi_init(void)
 	assert(ap_netif);
 
 	esp_netif_ip_info_t ip_info;
-	
+
 	/** NOTE: This is where you set the access point (AP) IP address 
 			and gateway address. It has to be a class A internet address
 			otherwise the captive portal sign-in prompt won't show up	on 
 			Android when you connect to the access point. */
-	IP4_ADDR(&ip_info.ip, 124,213,16,29);
-	IP4_ADDR(&ip_info.gw, 124,213,16,29);
-	IP4_ADDR(&ip_info.netmask, 255,0,0,0);
+	IP4_ADDR(&ip_info.ip, 124, 213, 16, 29);
+	IP4_ADDR(&ip_info.gw, 124, 213, 16, 29);
+	IP4_ADDR(&ip_info.netmask, 255, 0, 0, 0);
 	esp_netif_dhcps_stop(ap_netif);
 	esp_netif_set_ip_info(ap_netif, &ip_info);
 	esp_netif_dhcps_start(ap_netif);
@@ -146,7 +146,8 @@ void wifi_captive_portal_esp_idf_wifi_task(void *pvParameter)
 		{
 			bool wifi_is_init = false;
 
-			if (pvParameter != NULL) {
+			if (pvParameter != NULL)
+			{
 				wifi_task_action = WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_COPY(pvParameter);
 			}
 
