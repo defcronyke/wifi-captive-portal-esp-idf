@@ -74,7 +74,7 @@ static esp_err_t rest_common_get_handler(httpd_req_t *req)
   {
     ESP_LOGE(HTTPD_TAG, "failed getting HOST header value: %d", res);
 
-    switch (res
+    switch (res)
     {
     case ESP_ERR_NOT_FOUND:
       ESP_LOGE(HTTPD_TAG, "failed getting HOST header value: ESP_ERR_NOT_FOUND: Key not found: %d", res);
