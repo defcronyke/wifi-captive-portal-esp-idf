@@ -1,0 +1,41 @@
+# wifi-captive-portal-esp-idf
+#
+# Copyright (c) 2021 Jeremy Carter <jeremy@jeremycarter.ca>
+#
+# This code is released under the license terms contained in the
+# file named LICENSE, which is found in the top-level folder in
+# this project. You must agree to follow those license terms,
+# otherwise you aren't allowed to copy, distribute, or use any 
+# part of this project in any way.
+
+image: alpine:latest
+
+build-job:
+  stage: build
+  image: espressif/idf:release-v4.2
+  script:
+    - git checkout $CI_COMMIT_REF_NAME
+    - cp sdkconfig.defaults sdkconfig
+    - idf.py build
+    - cp build/partition_table/partition-table.bin .
+    - cp build/bootloader/bootloader.bin .
+    - cp build/wifi-captive-portal-esp-idf.bin .
+  artifacts:
+    name: "wifi-captive-portal-esp-idf-bin-$CI_COMMIT_REF_NAME"
+    paths:
+      - partition-table.bin
+      - bootloader.bin
+      - wifi-captive-portal-esp-idf.bin
+  only:
+    - master
+
+# pages:
+#   stage: deploy
+#   script:
+#     - echo 'Nothing to do...'
+#   artifacts:
+#     paths:
+#       - public
+#     expire_in: 1 day
+#   only:
+#     - master
