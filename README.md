@@ -18,9 +18,25 @@ This project is primarily released under the terms of the license contained in t
 
 This is tested and working on Android at least as recently as `2021-04-25`. It will cause Android devices to prompt the user to "`sign-in to the access point`" as soon as they connect on Wifi when it's working properly, so if you notice it's not doing that, please file a bug report so it can maybe be solved. The author doesn't have other brand devices, so support for others isn't planned.
 
-This depends on the [`"release/v4.2" branch of Espressif's ESP-IDF`](https://github.com/espressif/esp-idf/tree/release/v4.2) for ESP32 microcontrollers, so you'll need to use that version (which was [`the current stable version`](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/) when this project was made, and it still might be). Feel free to file a bug report if you notice that Espressif releases a new stable version of IDF, and I'll happily update this so it works properly with it.
+## Usage
 
-Note that their `v4.2 git release tag` of ESP-IDF has bugs, so you need to use their [`release/v4.2 git release branch`](https://github.com/espressif/esp-idf/tree/release/v4.2) instead, which at the time of writing was not mentioned in their stable version documentation.
+- To install the pre-built version onto your USB/serial-connected ESP32 device, enter the following commands in a Linux terminal:
+
+  ```shell
+  # First install "python", "pip", and Espressif's firmware
+  # flashing tool "esptool.py" if you don't have those:
+  pip install esptool
+
+  # (Optional) If the above command doesn't work, try this
+  # one instead:
+  python -m pip install esptool
+
+  # Installs directly from GitLab's CI/CD artifacts archive.
+  # The arguments are optional and the defaults are as below:
+  # (git branch: master, target serial device: /dev/ttyUSB0,
+  # flashing baud rate: 115200, firmware size: 4MB)
+  bash <(curl -sL https://tinyurl.com/wifi-captive-portal-install) master /dev/ttyUSB0 115200 4MB
+  ```
 
 ## Access Point Login Details for Captive Portal
 
@@ -28,5 +44,12 @@ WiFi AP SSID: `wifi-net-84541`
 
 WiFi AP Password: `DHJSd 86 fUIxdf`
 
-_You can change those details in the Kconfig menu by running `idf.py menuconfig`,
-and navigating to the `[<>] Project connection config` section._
+_You can change those details in the Kconfig menu if you have ESP-IDF installed, by running `idf.py menuconfig` and navigating to the `[<>] Project connection config` section._
+
+_When you're ready to install your modified version, use the command `idf.py flash monitor`_
+
+## Important
+
+This depends on the [`"release/v4.2" branch of Espressif's ESP-IDF`](https://github.com/espressif/esp-idf/tree/release/v4.2) for ESP32 microcontrollers, so you'll need to use that version if you want to customize the firmware (which was [`the current stable version`](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/) when this project was made, and it still might be). Feel free to file a bug report if you notice that Espressif releases a new stable version of IDF, and I'll happily update this so it works properly with it.
+
+Note that their `v4.2 git release tag` of ESP-IDF has bugs, so you need to use their [`release/v4.2 git release branch`](https://github.com/espressif/esp-idf/tree/release/v4.2) instead, which at the time of writing was not mentioned in their stable version documentation.
