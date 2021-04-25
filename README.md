@@ -35,8 +35,9 @@ If you find any bugs, please file a bug report so I can try to improve it.
   # one instead:
   python -m pip install esptool
 
-  # Installs directly from GitLab's CI/CD artifacts archive.
-  # The arguments are optional and the defaults are as below:
+  # Install the pre-built firmware of this project directly
+  # from GitLab's CI/CD artifacts archive. The arguments are
+  # optional and the defaults are as below:
   # (git branch: master, target serial device: /dev/ttyUSB0,
   # flashing baud rate: 115200, firmware size: 4MB)
   bash <(curl -sL https://tinyurl.com/wifi-captive-portal-install) master /dev/ttyUSB0 115200 4MB
