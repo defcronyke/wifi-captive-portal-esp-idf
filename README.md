@@ -1,4 +1,4 @@
-# wifi-captive-portal-esp-idf
+# Wifi Captive Portal ESP-IDF
 
 An ESP-IDF firmware project for a wifi access point captive portal.
 
