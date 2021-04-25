@@ -5,7 +5,7 @@
 # This code is released under the license terms contained in the
 # file named LICENSE, which is found in the top-level folder in
 # this project. You must agree to follow those license terms,
-# otherwise you aren't allowed to copy, distribute, or use any 
+# otherwise you aren't allowed to copy, distribute, or use any
 # part of this project in any way.
 
 idf_component_register(
@@ -13,7 +13,7 @@ idf_component_register(
     "main.c"
 
     ${project_dir}/components/wifi-captive-portal-esp-idf-component/wifi-captive-portal-esp-idf.c
-  
+
   REQUIRES
     "wifi-captive-portal-esp-idf-component"
 

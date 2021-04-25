@@ -5,7 +5,7 @@
 # This code is released under the license terms contained in the
 # file named LICENSE, which is found in the top-level folder in
 # this project. You must agree to follow those license terms,
-# otherwise you aren't allowed to copy, distribute, or use any 
+# otherwise you aren't allowed to copy, distribute, or use any
 # part of this project in any way.
 
 idf_component_register(
@@ -57,7 +57,7 @@ idf_component_register(
 
     $ENV{IDF_PATH}/examples/common_components/protocol_examples_common/include
 
-  # EMBED_TXTFILES 
+  # EMBED_TXTFILES
   #   ""
 )
 
@@ -72,25 +72,25 @@ set(EXTRA_COMPONENT_DIRS $ENV{IDF_PATH}/examples/common_components/protocol_exam
 #
 # 	set(WEB_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/web")
 #
-#   # TODO: If you use this path to store your website files, 
-#   # your site can be easily deployed on GitLab Pages 
+#   # TODO: If you use this path to store your website files,
+#   # your site can be easily deployed on GitLab Pages
 #   # static website hosting. You might like to do that
 #   # so your users can see a demo of the site which runs
 #   # on the ESP firmware. You can also copy the contents
-#   # of this folder to the folder ${CMAKE_CURRENT_SOURCE_DIR}/docs, 
+#   # of this folder to the folder ${CMAKE_CURRENT_SOURCE_DIR}/docs,
 #   # and then the site can be easily deployed on GitHub
-#   # Pages if you want, but if you do that you don't need 
-#   # to reference that folder in this file as with the 
+#   # Pages if you want, but if you do that you don't need
+#   # to reference that folder in this file as with the
 #   # line below.
 #
 #   set(WEB_DIST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/public")
 #
-#   # TODO: Use minified production version of the site if 
+#   # TODO: Use minified production version of the site if
 #   # available (maybe you do it using Webpack).
 #
 # 	if(EXISTS ${WEB_DIST_DIR})
 # 		spiffs_create_partition_image(www ${WEB_DIST_DIR} FLASH_IN_PROJECT)
-#	
+#
 #   else()
 # 		message(FATAL_ERROR "${WEB_DIST_DIR} doesn't exit. Please run 'npm run build' in ${WEB_SRC_DIR}")
 #
