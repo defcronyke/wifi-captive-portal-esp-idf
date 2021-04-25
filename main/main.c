@@ -13,5 +13,4 @@
 void app_main(void)
 {
 	wifi_captive_portal_esp_idf();
-	// main_fn();
 }

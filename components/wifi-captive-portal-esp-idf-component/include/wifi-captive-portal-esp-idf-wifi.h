@@ -22,7 +22,7 @@ ESP_EVENT_DECLARE_BASE(WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT);
 enum	/**< The events. */
 {
 	WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT_FINISH,		/**< An event for "this task is finished". */
-	WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT_STOPPED,	/**< Do something after the wifi interface has stopped. */
+	WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT_STOPPED,		/**< Do something after the wifi interface has stopped. */
 };
 
 /** The event loop handle. */

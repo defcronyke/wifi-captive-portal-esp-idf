@@ -29,6 +29,8 @@ build-job:
   only:
     - master
 
+# # TODO: Enable deploying the contents of a public/ folder to 
+# # GitLab Pages static website hosting.
 # pages:
 #   stage: deploy
 #   script:
