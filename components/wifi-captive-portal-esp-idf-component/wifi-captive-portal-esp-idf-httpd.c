@@ -9,7 +9,7 @@
 		part of this project in any way.
 
 		Contains some modified example code from here:
-		https://github.com/espressif/esp-idf/blob/release/v4.2/examples/protocols/openssl_server/main/openssl_server_example_main.c
+		https://github.com/espressif/esp-idf/blob/release/v4.2/examples/protocols/http_server/simple/main/main.c
 		https://github.com/espressif/esp-idf/blob/release/v4.2/examples/protocols/http_server/restful_server/main/rest_server.c
 
 		Original Example Code Header:
@@ -94,6 +94,90 @@ typedef struct rest_server_context
 } rest_server_context_t;
 
 #define CHECK_FILE_EXTENSION(filename, ext) (strcasecmp(&filename[strlen(filename) - strlen(ext)], ext) == 0)
+
+// /* An HTTP GET handler */
+// static esp_err_t hello_get_handler(httpd_req_t *req)
+// {
+//     char*  buf;
+//     size_t buf_len;
+
+//     /* Get header value string length and allocate memory for length + 1,
+//      * extra byte for null termination */
+//     buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
+//     if (buf_len > 1) {
+//         buf = malloc(buf_len);
+//         /* Copy null terminated value string into buffer */
+//         if (httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK) {
+//             ESP_LOGI(HTTPD_TAG, "Found header => Host: %s", buf);
+//         }
+//         free(buf);
+//     }
+
+//     buf_len = httpd_req_get_hdr_value_len(req, "Test-Header-2") + 1;
+//     if (buf_len > 1) {
+//         buf = malloc(buf_len);
+//         if (httpd_req_get_hdr_value_str(req, "Test-Header-2", buf, buf_len) == ESP_OK) {
+//             ESP_LOGI(HTTPD_TAG, "Found header => Test-Header-2: %s", buf);
+//         }
+//         free(buf);
+//     }
+
+//     buf_len = httpd_req_get_hdr_value_len(req, "Test-Header-1") + 1;
+//     if (buf_len > 1) {
+//         buf = malloc(buf_len);
+//         if (httpd_req_get_hdr_value_str(req, "Test-Header-1", buf, buf_len) == ESP_OK) {
+//             ESP_LOGI(HTTPD_TAG, "Found header => Test-Header-1: %s", buf);
+//         }
+//         free(buf);
+//     }
+
+//     /* Read URL query string length and allocate memory for length + 1,
+//      * extra byte for null termination */
+//     buf_len = httpd_req_get_url_query_len(req) + 1;
+//     if (buf_len > 1) {
+//         buf = malloc(buf_len);
+//         if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) {
+//             ESP_LOGI(HTTPD_TAG, "Found URL query => %s", buf);
+//             char param[32];
+//             /* Get value of expected key from query string */
+//             if (httpd_query_key_value(buf, "query1", param, sizeof(param)) == ESP_OK) {
+//                 ESP_LOGI(HTTPD_TAG, "Found URL query parameter => query1=%s", param);
+//             }
+//             if (httpd_query_key_value(buf, "query3", param, sizeof(param)) == ESP_OK) {
+//                 ESP_LOGI(HTTPD_TAG, "Found URL query parameter => query3=%s", param);
+//             }
+//             if (httpd_query_key_value(buf, "query2", param, sizeof(param)) == ESP_OK) {
+//                 ESP_LOGI(HTTPD_TAG, "Found URL query parameter => query2=%s", param);
+//             }
+//         }
+//         free(buf);
+//     }
+
+//     /* Set some custom headers */
+//     httpd_resp_set_hdr(req, "Custom-Header-1", "Custom-Value-1");
+//     httpd_resp_set_hdr(req, "Custom-Header-2", "Custom-Value-2");
+
+//     /* Send response with custom headers and body set as the
+//      * string passed in user context*/
+//     const char* resp_str = (const char*) req->user_ctx;
+//     httpd_resp_send(req, resp_str, strlen(resp_str));
+
+//     /* After sending the HTTP response the old HTTP request
+//      * headers are lost. Check if HTTP request headers can be read now. */
+//     if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
+//         ESP_LOGI(HTTPD_TAG, "Request headers lost");
+//     }
+//     return ESP_OK;
+// }
+
+// static const httpd_uri_t hello = {
+//     .uri       = "/hello",
+//     .method    = HTTP_GET,
+//     .handler   = hello_get_handler,
+//     /* Let's pass response string in user
+//      * context to demonstrate it's usage */
+//     .user_ctx  = "Hello World!"
+// };
 
 // #if CONFIG_EXAMPLE_WEB_DEPLOY_SEMIHOST
 // esp_err_t init_fs(void)
@@ -306,90 +390,161 @@ static esp_err_t rest_common_get_handler(httpd_req_t *req)
 		
 
 
+		char*  buf;
+    size_t buf_len;
+
+    /* Get header value string length and allocate memory for length + 1,
+     * extra byte for null termination */
+    buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
+    if (buf_len > 1) {
+        buf = malloc(buf_len);
+        /* Copy null terminated value string into buffer */
+        if (httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK) {
+            ESP_LOGI(HTTPD_TAG, "Found header => Host: %s", buf);
+        }
+        free(buf);
+    }
+
+    buf_len = httpd_req_get_hdr_value_len(req, "Test-Header-2") + 1;
+    if (buf_len > 1) {
+        buf = malloc(buf_len);
+        if (httpd_req_get_hdr_value_str(req, "Test-Header-2", buf, buf_len) == ESP_OK) {
+            ESP_LOGI(HTTPD_TAG, "Found header => Test-Header-2: %s", buf);
+        }
+        free(buf);
+    }
+
+    buf_len = httpd_req_get_hdr_value_len(req, "Test-Header-1") + 1;
+    if (buf_len > 1) {
+        buf = malloc(buf_len);
+        if (httpd_req_get_hdr_value_str(req, "Test-Header-1", buf, buf_len) == ESP_OK) {
+            ESP_LOGI(HTTPD_TAG, "Found header => Test-Header-1: %s", buf);
+        }
+        free(buf);
+    }
+
+    /* Read URL query string length and allocate memory for length + 1,
+     * extra byte for null termination */
+    buf_len = httpd_req_get_url_query_len(req) + 1;
+    if (buf_len > 1) {
+        buf = malloc(buf_len);
+        if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) {
+            ESP_LOGI(HTTPD_TAG, "Found URL query => %s", buf);
+            char param[32];
+            /* Get value of expected key from query string */
+            if (httpd_query_key_value(buf, "query1", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(HTTPD_TAG, "Found URL query parameter => query1=%s", param);
+            }
+            if (httpd_query_key_value(buf, "query3", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(HTTPD_TAG, "Found URL query parameter => query3=%s", param);
+            }
+            if (httpd_query_key_value(buf, "query2", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(HTTPD_TAG, "Found URL query parameter => query2=%s", param);
+            }
+        }
+        free(buf);
+    }
+
+    /* Set some custom headers */
+    httpd_resp_set_hdr(req, "Custom-Header-1", "Custom-Value-1");
+    httpd_resp_set_hdr(req, "Custom-Header-2", "Custom-Value-2");
+
+    /* Send response with custom headers and body set as the
+     * string passed in user context*/
+    const char* resp_str = (const char*) req->user_ctx;
+    httpd_resp_send(req, resp_str, strlen(resp_str));
+
+    /* After sending the HTTP response the old HTTP request
+     * headers are lost. Check if HTTP request headers can be read now. */
+    if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
+        ESP_LOGI(HTTPD_TAG, "Request headers lost");
+    }
 
 
 
-		rest_server_context_t *rest_context = (rest_server_context_t *)req->user_ctx;
 
-		char filepath[FILE_PATH_MAX];
 
-		// Find the start of any query parameters and remove them.
-		uint endpos = strlen(req->uri);
+	// 	rest_server_context_t *rest_context = (rest_server_context_t *)req->user_ctx;
 
-		char *s = NULL;
-		s = strstr(req->uri, "?");
+	// 	char filepath[FILE_PATH_MAX];
 
-		if (s != NULL) {
-			endpos = s - req->uri;
-		}
+	// 	// Find the start of any query parameters and remove them.
+	// 	uint endpos = strlen(req->uri);
 
-		char req_uri[endpos + 1];
-		strlcpy(req_uri, req->uri, sizeof(req_uri));
+	// 	char *s = NULL;
+	// 	s = strstr(req->uri, "?");
 
-		strlcpy(filepath, rest_context->base_path, sizeof(filepath));
-		if (req_uri[strlen(req_uri) - 1] == '/')
-		{
-			strlcat(filepath, "/index.html", sizeof(filepath));
-		}
-		else
-		{
-			strlcat(filepath, req_uri, sizeof(filepath));
-		}
+	// 	if (s != NULL) {
+	// 		endpos = s - req->uri;
+	// 	}
 
-		int fd = open(filepath, O_RDONLY, 0);
-		if (fd == -1)
-		{
-			ESP_LOGE(HTTPD_TAG, "Failed to open file : %s", filepath);
+	// 	char req_uri[endpos + 1];
+	// 	strlcpy(req_uri, req->uri, sizeof(req_uri));
 
-			memset((void *)filepath, 0, sizeof(filepath));
+	// 	strlcpy(filepath, rest_context->base_path, sizeof(filepath));
+	// 	if (req_uri[strlen(req_uri) - 1] == '/')
+	// 	{
+	// 		strlcat(filepath, "/index.html", sizeof(filepath));
+	// 	}
+	// 	else
+	// 	{
+	// 		strlcat(filepath, req_uri, sizeof(filepath));
+	// 	}
 
-			strlcpy(filepath, rest_context->base_path, sizeof(filepath));
+	// 	int fd = open(filepath, O_RDONLY, 0);
+	// 	if (fd == -1)
+	// 	{
+	// 		ESP_LOGE(HTTPD_TAG, "Failed to open file : %s", filepath);
 
-			strlcat(filepath, "/index.html", sizeof(filepath));
+	// 		memset((void *)filepath, 0, sizeof(filepath));
 
-			fd = open(filepath, O_RDONLY, 0);
-			if (fd == -1)
-			{
-				ESP_LOGE(HTTPD_TAG, "Failed to open file : %s", filepath);
+	// 		strlcpy(filepath, rest_context->base_path, sizeof(filepath));
 
-				/* Respond with 500 Internal Server Error */
-				httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to read existing file");
-				return ESP_FAIL;
-			}
-		}
+	// 		strlcat(filepath, "/index.html", sizeof(filepath));
 
-		set_content_type_from_file(req, filepath);
+	// 		fd = open(filepath, O_RDONLY, 0);
+	// 		if (fd == -1)
+	// 		{
+	// 			ESP_LOGE(HTTPD_TAG, "Failed to open file : %s", filepath);
 
-		char *chunk = rest_context->scratch;
-		ssize_t read_bytes;
-		do
-		{
-			/* Read file in chunks into the scratch buffer */
-			read_bytes = read(fd, chunk, SCRATCH_BUFSIZE);
-			if (read_bytes == -1)
-			{
-				ESP_LOGE(HTTPD_TAG, "Failed to read file : %s", filepath);
-			}
-			else if (read_bytes > 0)
-			{
-				/* Send the buffer contents as HTTP response chunk */
-				if (httpd_resp_send_chunk(req, chunk, read_bytes) != ESP_OK)
-				{
-					close(fd);
-					ESP_LOGE(HTTPD_TAG, "File sending failed!");
-					/* Abort sending file */
-					httpd_resp_sendstr_chunk(req, NULL);
-					/* Respond with 500 Internal Server Error */
-					httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to send file");
-					return ESP_FAIL;
-				}
-			}
-		} while (read_bytes > 0);
-		/* Close file after sending complete */
-		close(fd);
-		ESP_LOGI(HTTPD_TAG, "File sending complete");
-		/* Respond with an empty chunk to signal HTTP response completion */
-		httpd_resp_send_chunk(req, NULL, 0);
+	// 			/* Respond with 500 Internal Server Error */
+	// 			httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to read existing file");
+	// 			return ESP_FAIL;
+	// 		}
+	// 	}
+
+	// 	set_content_type_from_file(req, filepath);
+
+	// 	char *chunk = rest_context->scratch;
+	// 	ssize_t read_bytes;
+	// 	do
+	// 	{
+	// 		/* Read file in chunks into the scratch buffer */
+	// 		read_bytes = read(fd, chunk, SCRATCH_BUFSIZE);
+	// 		if (read_bytes == -1)
+	// 		{
+	// 			ESP_LOGE(HTTPD_TAG, "Failed to read file : %s", filepath);
+	// 		}
+	// 		else if (read_bytes > 0)
+	// 		{
+	// 			/* Send the buffer contents as HTTP response chunk */
+	// 			if (httpd_resp_send_chunk(req, chunk, read_bytes) != ESP_OK)
+	// 			{
+	// 				close(fd);
+	// 				ESP_LOGE(HTTPD_TAG, "File sending failed!");
+	// 				/* Abort sending file */
+	// 				httpd_resp_sendstr_chunk(req, NULL);
+	// 				/* Respond with 500 Internal Server Error */
+	// 				httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to send file");
+	// 				return ESP_FAIL;
+	// 			}
+	// 		}
+	// 	} while (read_bytes > 0);
+	// 	/* Close file after sending complete */
+	// 	close(fd);
+	// 	ESP_LOGI(HTTPD_TAG, "File sending complete");
+	// 	/* Respond with an empty chunk to signal HTTP response completion */
+	// 	httpd_resp_send_chunk(req, NULL, 0);
 	}
 
 
@@ -720,7 +875,8 @@ static void start_httpd(void* pvParameter)
 		.uri = "/*",
 		.method = HTTP_GET,
 		.handler = rest_common_get_handler,
-		.user_ctx = rest_context};
+		.user_ctx = "Hello World!"};
+		// .user_ctx = rest_context};
 	httpd_register_uri_handler(server, &common_get_uri);
 
 	ESP_LOGI(HTTPD_TAG, "Registered HTTP server URI handlers.");
