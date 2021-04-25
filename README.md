@@ -16,6 +16,8 @@ This project is primarily released under the terms of the license contained in t
 
 ## Details
 
+This is tested and working on Android at least as recently as `2021-04-25`. It will cause Android devices to prompt the user to "`sign-in to the access point`" as soon as they connect on Wifi when it's working properly, so if you notice it's not doing that, please file a bug report so it can maybe be solved. The author doesn't have other brand devices, so support for others isn't planned.
+
 This depends on the [`"release/v4.2" branch of Espressif's ESP-IDF`](https://github.com/espressif/esp-idf/tree/release/v4.2) for ESP32 microcontrollers, so you'll need to use that version (which was [`the current stable version`](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/) when this project was made, and it still might be). Feel free to file a bug report if you notice that Espressif releases a new stable version of IDF, and I'll happily update this so it works properly with it.
 
 Note that their `v4.2 git release tag` of ESP-IDF has bugs, so you need to use their [`release/v4.2 git release branch`](https://github.com/espressif/esp-idf/tree/release/v4.2) instead, which at the time of writing, was not mentioned in their stable version documentation.
