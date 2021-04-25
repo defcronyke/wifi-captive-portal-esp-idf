@@ -340,7 +340,10 @@ void wifi_captive_portal_esp_idf_wifi_task(void *pvParameter)
 		while (1)
 		{
 			bool wifi_is_init = false;
-			wifi_task_action = WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_COPY(pvParameter);
+
+			if (pvParameter != NULL) {
+				wifi_task_action = WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_COPY(pvParameter);
+			}
 
 			esp_err_t err = ESP_OK;
 
