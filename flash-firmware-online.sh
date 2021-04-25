@@ -11,6 +11,7 @@
 # part of this project in any way.
 
 wifi_captive_portal_esp_idf_flash_firmware_online() {
+  GIT_REPO_BRANCH=${GIT_REPO_BRANCH:-"master"}
   GITLAB_USER=${GITLAB_USER:-"defcronyke"}
   GITLAB_REPO=${GITLAB_REPO:-"wifi-captive-portal-esp-idf"}
   SERIAL_PORT=${SERIAL_PORT:-"/dev/ttyUSB0"}
@@ -18,15 +19,19 @@ wifi_captive_portal_esp_idf_flash_firmware_online() {
   FLASH_SIZE=${FLASH_SIZE:-"4MB"}
 
   if [ $# -ge 1 ]; then
-    SERIAL_PORT="$1"
+    GIT_REPO_BRANCH="$1"
   fi
 
   if [ $# -ge 2 ]; then
-    BAUD_RATE="$2"
+    SERIAL_PORT="$2"
   fi
 
   if [ $# -ge 3 ]; then
-    FLASH_SIZE="$3"
+    BAUD_RATE="$3"
+  fi
+
+  if [ $# -ge 4 ]; then
+    FLASH_SIZE="$4"
   fi
 
   URL_BASE="https://gitlab.com/$GITLAB_USER/$GITLAB_REPO/builds/artifacts/$GIT_REPO_BRANCH/raw/"; \
