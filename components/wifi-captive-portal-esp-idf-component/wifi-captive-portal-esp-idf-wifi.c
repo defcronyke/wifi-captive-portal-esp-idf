@@ -347,8 +347,23 @@ void wifi_captive_portal_esp_idf_wifi_task(void *pvParameter)
 
 			esp_err_t err = ESP_OK;
 
-			switch (wifi_task_action.id)
+			/** Init only once. */
+			if (!wifi_is_init)
 			{
+// #ifdef CONFIG_EXAMPLE_CONNECT_WIFI
+				ESP_LOGI(wifi_captive_portal_esp_idf_wifi_tag, "wifi initializing...");
+// #endif
+
+				/** Initialize wifi (or just ethernet, but that's not 
+					currently supported, so things won't work properly
+					with wifi disabled). */
+				wifi_captive_portal_esp_idf_wifi_init();
+
+				wifi_is_init = true;
+			}
+
+			// switch (wifi_task_action.id)
+			// {
 // 			/** Initialize (if necessary), and connect to a wifi network. */
 // 			case WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_CONNECT:
 // 			{
@@ -385,39 +400,39 @@ void wifi_captive_portal_esp_idf_wifi_task(void *pvParameter)
 // 				break;
 // 			}
 
-			/** Disconnect and stop wifi interface. */
-			case WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_STOP:
-			{
-				ESP_LOGI(wifi_captive_portal_esp_idf_wifi_tag, "running epaper idf wifi task action: WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_STOP");
+// 			/** Disconnect and stop wifi interface. */
+// 			case WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_STOP:
+// 			{
+// 				ESP_LOGI(wifi_captive_portal_esp_idf_wifi_tag, "running epaper idf wifi task action: WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_STOP");
 
-				if (wifi_task_action.value != NULL)
-				{
-					wifi_task_action_value = WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_VALUE_COPY(wifi_task_action.value);
-				}
+// 				if (wifi_task_action.value != NULL)
+// 				{
+// 					wifi_task_action_value = WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_VALUE_COPY(wifi_task_action.value);
+// 				}
 
-// #ifdef CONFIG_EXAMPLE_CONNECT_WIFI
-				/** Disconnect wifi. */
-				wifi_captive_portal_esp_idf_wifi_disconnect();
+// // #ifdef CONFIG_EXAMPLE_CONNECT_WIFI
+// 				/** Disconnect wifi. */
+// 				wifi_captive_portal_esp_idf_wifi_disconnect();
 
-				/** Stop wifi interface. */
-				esp_wifi_stop();
-// #endif
+// 				/** Stop wifi interface. */
+// 				esp_wifi_stop();
+// // #endif
 
-				/** Send an event which says "this task is finished". */
-				err = esp_event_post_to(wifi_captive_portal_esp_idf_wifi_event_loop_handle, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT_STOPPED, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_VALUE_CAST_VOID_P(wifi_task_action_value), sizeof(wifi_task_action_value), portMAX_DELAY);
-				if (err != ESP_OK)
-				{
-					ESP_LOGE(wifi_captive_portal_esp_idf_wifi_tag, "Sending event failed");
-				}
+// 				/** Send an event which says "this task is finished". */
+// 				err = esp_event_post_to(wifi_captive_portal_esp_idf_wifi_event_loop_handle, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT_STOPPED, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_TASK_ACTION_VALUE_CAST_VOID_P(wifi_task_action_value), sizeof(wifi_task_action_value), portMAX_DELAY);
+// 				if (err != ESP_OK)
+// 				{
+// 					ESP_LOGE(wifi_captive_portal_esp_idf_wifi_tag, "Sending event failed");
+// 				}
 
-				break;
-			}
+// 				break;
+// 			}
 
-			default:
-			{
-				break;
-			}
-			}
+// 			default:
+// 			{
+// 				break;
+// 			}
+// 			}
 
 			/** Send an event which says "this task is finished". */
 			err = esp_event_post_to(wifi_captive_portal_esp_idf_wifi_event_loop_handle, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT, WIFI_CAPTIVE_PORTAL_ESP_IDF_WIFI_EVENT_FINISH, NULL, 0, portMAX_DELAY);
