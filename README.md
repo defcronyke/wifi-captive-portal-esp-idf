@@ -59,6 +59,22 @@ This depends on the [`"release/v4.2" branch of Espressif's ESP-IDF`](https://git
 
 Note that their `v4.2 git release tag` of ESP-IDF has bugs, so you need to use their [`release/v4.2 git release branch`](https://github.com/espressif/esp-idf/tree/release/v4.2) instead, which at the time of writing was not mentioned in their stable version documentation.
 
+## How it works
+
+### (requirements to make the sign-in prompt come up on Android as of 2021-04-26)
+
+1. The ESP32 AP needs its `IP address` set as a `class A public internet address`, which is some address on `subnet 255.0.0.0` (probably any fake IP unless you want to use one you actually own). Its DHCP server will then give out addresses to connected clients starting at +1 from that address.
+1. The AP needs to run a `DNS server` which is configured to resolve every requested `hostname` from the client to its own `IP address`.
+1. The AP needs to run an `HTTP server` (HTTPS don't work well for this because `HSTS` breaks its usefulness).
+1. The `HTTP server` needs to check the "`Host`" header on all client requests, and if `Host` is "`connectivitycheck.gstatic.com`", the server needs to respond with a `redirect "302 Found" status` (which needs a non-empty body, so maybe you put something like "`302 Found`"). The `"Location" header` on that response needs to be an `absolute URL` starting with "`http://`", followed by any `hostname` your prefer. The `hostname` you choose will show at the top of the `captive portal` page, so you might want to use one which would look nice there.
+1. The `HTTP server` needs to respond to whatever `hostname` you used in the above `redirect` with a `"200 OK" status response`, and its `body` needs to contain whatever page content you'd like to be displayed to the user inside the page which comes up when they tap the `"sign-in to access point" prompt` on `Android`.
+1. The `HTTP server` needs to be responding to all other `requests` that have any different `"Host" header value`, with a `"200 OK" status response`.
+1. (Optional) If you want some kind of `auth flow` for the `captive portal`, involving some kind of additional user login or payment or anything like that to be required before the user is allowed to use the `access point`, you can signal to the `Android` device that the user has successfully completed the `login requirement` by switching the `HTTP server's` behaviour so it responds to `any future requests by that user` to "`connectivitycheck.gstatic.com`", with a `"200 OK" status response`.
+
+   If you implement all those things (or use/build on this solution), you should get a `Wifi Captive Portal` which is working for `Android`.
+
+   If anyone wants to tell me `how to modify it so it works on iPhones` as well, I'll happily add the code for it, but I have no way of testing if it works, so you might need to test it for me afterwards to see if I did it correctly.
+
 ## Acknowledgements
 
 The DNS-related code in this project was borrowed and improved from this other project by [`github.com/cornelis-61`](https://github.com/cornelis-61), so thanks a lot to the author of that one! - [`https://github.com/cornelis-61/esp32_Captdns`](https://github.com/cornelis-61/esp32_Captdns)
